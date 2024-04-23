@@ -1,0 +1,173 @@
+연결리스트 
+Array List (배열 리스트) 의 단점
+- 크기가 미리 결정되어야 한다.
+
+
+키워드 : 순차접근
+
+사전 지식
+1. 동적할당 (malloc , free)
+2. Pointer 
+
+Linked 무엇을 연결하는가? 
+
+1.데이터를 담을 공간
+2.연결도구
+
+위 1번과 2번을 합쳐서 Node 라는 구조체를 생성!
+
+head (최초 데이터의 위치는 알고있어야 함!) : 첫 번째 노드를 가리킨다.
+tail : 마지막 노드를 가리킨다. (없을수도 있다.)
+cur(현재위치) : 순차접근을 위해 현재 노드위치를 저장
+
+typedef struct _node{
+	int data; // 데이터를 담을 공간
+	struct _node * next; // 연결의 도구
+}
+
+LinkedRead.c 의 분석 : 초기화
+// 초기화 코드
+Node * head ==NULL;
+Node * tail ==NULL;
+Node * cur ==NULL;
+
+head, tail , cur 는 연결 리스트의 핵심.
+head 와 tail은 연결을 추가 및 유지하기 위한 것.
+cur 는 참조 및 조회를 위한 것.
+
+Linked List의 삽입 과정
+
+// 노드 추가 과정 
+newNode = (Node*)malloc(sizeof(Node));
+newNode->data = data1;
+newNode->next = null;
+
+- 삽입 첫번째인 경우 , 
+head 가 NULL 인경우, 
+아닌 경우, 분화되는 점을 알아둬야 한다.
+if(head == NULL){
+	head = newNode;
+}
+
+head 와 tail 이 첫번째 Node 를 가리킨다.
+
+- 삽입 두번째인 경우(Node의 추가 과정은 동일) 
+else{
+	tail->next = newNode;
+}
+
+tail = newNode;
+
+LinkedRead.c : 데이터 조회(전체 데이터 조회)
+
+if(head == NULL){
+	printf("없음");
+}else{
+	cur = head;
+	printf("%d",cur->next;
+	while(cur->next !=NULL){
+		cur = cur->next;
+		print("%d",cur-data);
+	}
+}
+
+LinkedRead.c : 데이터 삭제(전체 데이터 삭제)
+
+※ 노드를 삭제한 경우, next 에 가리킨 노드의 메모리 위치를
+알수 없기 때문에 , 다음 노드의 위치까지 변수에 
+저장해 둔 후, 현재 위치의 노드를 삭제(free)시킨 다음,
+delNextNode 가 NULL 일때까지 삭제해준다.
+
+if(head == NULL) {
+	return 0;
+}else{
+	Node *delNode = head;
+	Node *delNextNode = head->next;
+	printf("%d" 삭제 \n" , head->data);
+	free(delNode);
+	 
+	while(delNextNode != NULL){
+		delNode = delNextNode;
+		delNextNode = delNextNode->next;
+		printf("%d 삭제",delNode -> data);
+		free(delNode);
+	}
+}
+※ 기본 Linked List 의 연산 특성(삽입 / 조회 / 삭제 )
+이 공통적으로 첫번째 노드와 첫번째 이후의 노드의 
+연산처리가 분화되는 단점이 있음.
+
+
+연결리스트의 ADT 와 구현
+: 기능적으로는 동일하나, 구현은 달라짐 
+
+void ListInit(List * plist);
+ - 초기화 할 리스트의 주소 값을 인자로 전달한다.
+ - 리스트 생성 후 제일 먼저 호출 되어야 하는 함수이다.
+
+void LInsert(List *plist , LData data);
+ - 리스트에 데이터를 저장한다. 매개변수 data에 전달된 값을 저장한다.
+
+int LFirst(List * plist, LData * pdata);
+ - 첫 번째 데이터가 pdata가 가리키는 메모리에 저장된다.
+ - 데이터의 참조를 위한 초기화가 진행된다.
+ - 참조 성공 시, TRUE(1) , 실패시 FALSE(0) 반환
+
+int LNext(List * plist, LData * pdata);
+ - 참조된 데이터의 다음 데이터가 pdata가 가리키는 메모리에 저장된다.
+ - 순차적인 참조를 위해 반복 호출이 가능하다.
+ - 참조를 새로 시작하려면 먼저 LFirst 함수를 호출 해야 한다.
+ - 참조 성공시 TRUE(1), 실패 시 FALSE(0) 반환
+
+Ldata LRemove(List * plist);
+ - LFirst 또는 LNext 함수의 마지막 반환 데이터를 삭제한다.
+ - 삭제된 데이터는 반환된다.
+ - 마지막 반환 데이터를 삭제하므로 연이은 반복 호출을 허용하지 않는다.
+
+int LCount(List * plist);
+ - 리스트에 저장되어 있는 데이터의 수를 반환한다.
+
+void setSortRule(List * plist, int (*comp)(LData d1, LData de)); // 신규 함수 추가
+ - 리스트에 정렬의 기준이 되는 함수를 등록한다.
+
+새 노드의 추가 위치에 따른 장점과 단점
+
+새 노드를 연결 리스트 머리에 추가하는 경우(해당 방식을 선호하는게 좋은듯하다. tail 의 관리가 생략되기 때문에) 
+-> 단점 해결을 위한 Sort 함수를 만들거나 해야한다. 
+장점 : 포인터 변수 tail이 불필요하다.
+단점 : 저장된 순서를 유지하지 않는다.
+
+새 노드를 연결 리스트 꼬리에 추가하는 경우
+장점 : 저장된 순서가 유지된다.
+단점 : 포인터 변수 tail이 필요하다.
+
+SetSortRule 함수 선언에 대한 이해.
+함수 포인터
+int (*comp)(LData d1 , LData d2); 
+반환형이 int이고 LData 형 인자 두개를 전달 받는 함수의
+주소값을 전달 받아라.
+
+구현할 더미 노드 기반 연결 리스트
+**노드의 추가 및 삭제 ,조회 방식이 항상 일정하다.
+Dummy 노드를 갖게되지 않으면, 
+항상 첫번째 노드(Head)의 동작 방식들을 분화해야 하기 때문에
+소스코드가 길어진다.
+
+사전)
+구현하는 리스트의 tail을 제거하고, 
+정렬을 도와주는 멤버(함수 포인터)를 통해 
+리스트를 정렬한다. 
+정렬 기능 추가된 연결 리스트의 구조체
+1. 노드 구조체(중복)
+2. linkedList 구조체
+typedef struct _linkedList{
+
+	Node * head;
+	Node * cur;
+	Node * before; // 삭제를 돕는 멤버
+	int numOfData;
+	int(*comp)(LData d1,LData d2);
+} LinkedList;
+
+
+
