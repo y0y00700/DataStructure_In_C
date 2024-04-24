@@ -46,17 +46,62 @@ void FInsert(List * plist, LData data){
 	(plist->numOfData)++; // ë°ì´í„° ì¦ê°€newNodeë¥¼ ê°€ë¦¬í‚¤ê²Œí•œë‹¤.
 }
 
-
+// head ¿¡ next°¡  null ÀÌ ¾Æ´Ñ°æ¿ì  FALSE
+// before (»èÁ¦¿ëµµ) ¿¡´Â dummy ³ëµå¸¦ °¡¸®Å°µµ·Ï ÇÑ´Ù.
+// head´Â ÇöÀç dummy ¸¦ °¡¸®Å°°í ÀÖÀ¸¹Ç·Î cur¸¦ next À§Ä¡·Î ÀÌµ¿½ÃÅ²´Ù. 
+// cur¸¦ ¹İÈ¯ *pdata = plist->cur->data ÇÑ ÈÄ, TRUE ¹İÈ¯ 
+ 
 int LFirst(List * plist, LData * pdata){
-	
-}
-int LNext(List * plist, LData * pdata){
+	if(plist->head->next == NULL){
+		return FALSE;
+	}
+	plist->before = plist->head;
+	plist->cur = plist->head->next;
+		
+		*padata = plist->cur->data;
+	return TRUE;
 	
 }
 
-LData LRemove(List * plist){
+// cur ±âÁØ cur ÀÇ next °¡ ÀÖ´ÂÁö¸¦ ÆÇº°ÇÑ´Ù.
+// Á¸ÀçÇÏ´Â °æ¿ì TRUE ¹İÈ¯ ¹× pdata ¿¡ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇØ¾ßÇÑ´Ù. 
+// before ´Â ÇöÀç cur À§Ä¡·Î º¯°æÇÑ´Ù. 
+// cur ´Â cur->next; ·Î ÀÌµ¿ ½ÃÅ²´Ù. 
+// *pdata ¿¡ curÀÇ next °ªÀ» ¹İÈ¯ÇØ¾ßÇÑ´Ù. 
+int LNext(List * plist, LData * pdata){
+	if(plist->cur->next == NULL){
+		return FALSE;
+	}	
+	plist->before = plist->cur;
+	plist->cur = plist->cur->next;
+	*pdata = plist->cur->data;
 	
+	return TRUE;
 }
+
+
+
+//  before->next = cur->next;
+//  cur =  cur->next; 
+// cur ¸Ş¸ğ¸®¸¦ ÇØÁ¦ Free 
+// »èÁ¦ÇÒ µ¥ÀÌÅÍ ¹İÈ¯
+// µ¥ÀÌÅÍ°³¼ö -1 
+LData LRemove(List * plist){
+//	List * tmp = plist->cur;
+//	plist->before->next = plist->cur->next;
+//	plist-> cur = plist->cur->next;
+//	free(tmp);
+	List * tmp = plist->cur;
+	LData tdata = tmp->data;
+	plist->before->next = plist->cur->next;
+	plist->cur = plist->before;
+	free(tmp);
+	(plist->numOfData)--;
+	
+	return tdata;
+}
+
+
 int LCount(List * plist){
 	
 }
