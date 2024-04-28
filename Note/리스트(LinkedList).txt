@@ -213,3 +213,12 @@ LData LRemove(List * plist){
 ※ cur은 삭제후 재조정의 과정을 거쳐야 하지만 before는 LFirst or LNext 호출 시
 재설정되기 때문에 재조정의 과정이 불필요 하다.
 
+4-3. 연결리스트의 정렬 삽입의 구현
+
+정렬 기준이 되는 함수를 등록하는 SetSortRule 함수
+해당 함수 통해 전달된 함수 정보 저장을 위한 LinkedList멤버 comp
+comp에 등록된 정렬기준을 근거로 데이터 저장하는 SInsert함수
+
+SetSortRule 은 한번 다시 봐야할듯..
+
+

@@ -1,0 +1,62 @@
+원형 연결 리스트 (CircularList)
+개념 : 
+단순연결 리스트의 마지막 노드는 NULL을 가리킨다.
+원형 연결리스트의 마지막 노드는 첫 번째 노드를 가리킨다.(순환)
+
+특징
+시작 부분에 노드를 추가하건, 끝 부분에 노드를 추가하건 노드의 연결 순서가 같다.
+다만, Head 가 가리키는 노드가 다르다.
+
+이렇듯, 모든 노드가 원의 형태를 이루면서 연결되어 있기 때문에 원형 연결
+리스트에서는 사실상 머리와 꼬리의 구분이 없다.
+(편하게 볼수 있도록 임의적 구분이라고 볼수 있음)
+
+원형 연결 리스트에서 놓칠 수 없는 장점
+단순 연결리스트처럼 머리와 꼬리를 가리키는 포인터 변수를 각각 두지 않아도,
+하나의 포인터 변수만 있어도 머리 또는 꼬리에 노드를 간단히 추가 할 수 있다.
+-> Head 가 아닌 Tail 만 두어, Tail 에 newNode 를 연결하는것이 일반적인 원형 리스트이다.
+why?
+꼬리를 가리키는 포인터 변수는 ? -> tail
+머리를 가리키는 포인터 변수는 ? -> tail->next 
+
+이렇듯 리스트의 꼬리와 머리의 주소 값을 쉽게 확인할 수 있기 때문에 연결 리스트를 
+가리키는 포인터 변수는 하나만 있으면 된다.(tail)
+
+원형 연결 리스트의 구현 범위
+조회 관련 LFirst 이전 연결리스트와 기능 동일
+조회 관련 LNext 원형 연결리스트를 계속해서 순환하는 형태로 변경
+삭제 관련 LRemove 이전 연결리스트와 동일
+삽입 관련 앞과 뒤에 삽입이 가능하도록 두개의 함수 정의
+정렬 관련 정렬과 관련된 부분 제거
+이외 부분 모두 이전 연결리스트와 동일
+
+원형 연결리스트는 구조상 끝이 존재하지 않기 때문에 LNext 함수는 계속해서 호출이
+가능하고, 이로 인해 리스트를 순환하면서 저장된 값을 반환하도록 구현한다.
+
+변경부 (LInsert & Front 함수를 집중적으로 보자.)
+void LInsert(List * plist,Data data); 노드를 꼬리에 추가
+void LInsertFront(List * plist,Data data); 노드를 머리에 추가
+
+void ListInit(List &plist){
+	plist->tail = NULL;
+	plist->cur = NULL;
+	plist->before = NULL;
+	plist->numOfData =0;
+}
+
+#include<stdio.h>
+
+void LInsert(List * plist,Data data){
+	
+	Node * newNode = (Node*)malloc(sizeof(Node));
+	newNode->data = data;
+	
+	if(plist->tail == NULL){
+		plist->tail = newNode;
+		newNode->next = newNode;
+	}else{
+		
+	}
+	
+	(plist->numOfData)++;
+}

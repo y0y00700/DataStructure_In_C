@@ -46,10 +46,24 @@ void FInsert(List * plist, LData data){
 	(plist->numOfData)++; // ë°ì´í„° ì¦ê°€newNodeë¥¼ ê°€ë¦¬í‚¤ê²Œí•œë‹¤.
 }
 
-// head ¿¡ next°¡  null ÀÌ ¾Æ´Ñ°æ¿ì  FALSE
-// before (»èÁ¦¿ëµµ) ¿¡´Â dummy ³ëµå¸¦ °¡¸®Å°µµ·Ï ÇÑ´Ù.
-// head´Â ÇöÀç dummy ¸¦ °¡¸®Å°°í ÀÖÀ¸¹Ç·Î cur¸¦ next À§Ä¡·Î ÀÌµ¿½ÃÅ²´Ù. 
-// cur¸¦ ¹ÝÈ¯ *pdata = plist->cur->data ÇÑ ÈÄ, TRUE ¹ÝÈ¯ 
+void SInsert(List *plist,Ldata data){
+	Node * newNode = (*Node)malloc(sizeof(Node));
+	Node * pred = plist->head->next;
+	newNode->data = data;
+	// ìƒˆ ë…¸ë“œê°€ ë“¤ì–´ê°ˆ ìœ„ì¹˜ë¥¼ ì°¾ëŠ”ë‹¤.	
+	while(pred->next !=NULL && comp(data,pred->data)){
+		pred = pred->next;
+	}
+	
+	newNode->next = pred->next;
+	pred->next = newNode;
+	(plist->numOfData)++;
+}
+
+// head ï¿½ï¿½ nextï¿½ï¿½  null ï¿½ï¿½ ï¿½Æ´Ñ°ï¿½ï¿½  FALSE
+// before (ï¿½ï¿½ï¿½ï¿½ï¿½ëµµ) ï¿½ï¿½ï¿½ï¿½ dummy ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½.
+// headï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ dummy ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ curï¿½ï¿½ next ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å²ï¿½ï¿½. 
+// curï¿½ï¿½ ï¿½ï¿½È¯ *pdata = plist->cur->data ï¿½ï¿½ ï¿½ï¿½, TRUE ï¿½ï¿½È¯ 
  
 int LFirst(List * plist, LData * pdata){
 	if(plist->head->next == NULL){
@@ -63,11 +77,11 @@ int LFirst(List * plist, LData * pdata){
 	
 }
 
-// cur ±âÁØ cur ÀÇ next °¡ ÀÖ´ÂÁö¸¦ ÆÇº°ÇÑ´Ù.
-// Á¸ÀçÇÏ´Â °æ¿ì TRUE ¹ÝÈ¯ ¹× pdata ¿¡ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇØ¾ßÇÑ´Ù. 
-// before ´Â ÇöÀç cur À§Ä¡·Î º¯°æÇÑ´Ù. 
-// cur ´Â cur->next; ·Î ÀÌµ¿ ½ÃÅ²´Ù. 
-// *pdata ¿¡ curÀÇ next °ªÀ» ¹ÝÈ¯ÇØ¾ßÇÑ´Ù. 
+// cur ï¿½ï¿½ï¿½ï¿½ cur ï¿½ï¿½ next ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Çºï¿½ï¿½Ñ´ï¿½.
+// ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ TRUE ï¿½ï¿½È¯ ï¿½ï¿½ pdata ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ô·ï¿½ï¿½Ø¾ï¿½ï¿½Ñ´ï¿½. 
+// before ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ cur ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½. 
+// cur ï¿½ï¿½ cur->next; ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½Å²ï¿½ï¿½. 
+// *pdata ï¿½ï¿½ curï¿½ï¿½ next ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ø¾ï¿½ï¿½Ñ´ï¿½. 
 int LNext(List * plist, LData * pdata){
 	if(plist->cur->next == NULL){
 		return FALSE;
@@ -83,9 +97,9 @@ int LNext(List * plist, LData * pdata){
 
 //  before->next = cur->next;
 //  cur =  cur->next; 
-// cur ¸Þ¸ð¸®¸¦ ÇØÁ¦ Free 
-// »èÁ¦ÇÒ µ¥ÀÌÅÍ ¹ÝÈ¯
-// µ¥ÀÌÅÍ°³¼ö -1 
+// cur ï¿½Þ¸ð¸®¸ï¿½ ï¿½ï¿½ï¿½ï¿½ Free 
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+// ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ï¿½ï¿½ -1 
 LData LRemove(List * plist){
 //	List * tmp = plist->cur;
 //	plist->before->next = plist->cur->next;
