@@ -1,0 +1,21 @@
+양방향 연결 리스트
+
+typedef struct _node{
+	Data data;
+	struct _node * next;
+	struct _node * prev;
+} Node;
+
+양방향으로 노드를 연결하는 이유
+오른쪽 노드로의 이동이 용이하다. 
+역방향으로 이동이 가능하다.
+before 멤버 변수가 필요 없다.
+
+우리가 구현할 양방향 연결 리스트 모델
+
+LRemove함수를 ADT 에서 제외시킨다.
+대신에 왼쪽 노드의 데이터를 참조하는 LPrevious 함수를 ADT에 추가시킨다.
+새 노드는 머리에 추가한다.
+
+LRemove 함수를 이후에 정의할것(DummyNode 를 head와 tail에 넣어서)
+
