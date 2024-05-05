@@ -4,7 +4,6 @@ import java.io.InputStreamReader;
 import java.util.Stack;
 
 public class CalcPr {
-    static Stack st;
     static int operPr(char op){
         switch(op){
             case '*':
@@ -34,7 +33,7 @@ public class CalcPr {
     static char[] changePostFix(char [] exp){
         char [] changeExp = new char[exp.length];
         int counter = 0;
-        st = new Stack<Character>();
+        Stack st = new Stack<Character>();
 
         for(int i=0;i<exp.length;i++){
             if(Character.isDigit(exp[i])){
@@ -47,8 +46,10 @@ public class CalcPr {
                         break;
                     case ')':
                         while(true){
-                            if((char)st.pop()=='(')
+                            if((char)st.pop()=='('){
+                                st.pop();
                                 break;
+                            }
                             changeExp[counter++] = (char)st.pop();
                             System.out.print(changeExp[counter]+" ");
                         }
@@ -67,24 +68,48 @@ public class CalcPr {
                 System.out.print(changeExp[counter]+" ");
             }
             st.clear();
-
-            return changeExp;
         }
         return changeExp;
     }
-    
+
+    /**
+     * @param postArr
+     * @return
+     */
+    static int calPostFix(char [] postArr){ // postFix 로 변화돤 배열을 arg 로 받는다. 
+        Stack st2 = new Stack<Integer>();
+        for(int i=0;i<postArr.length;i++){
+            if(Character.isDigit(postArr[i])){
+                st2.push(Character.getNumericValue(postArr[i]));
+            }else{
+                int op2 = (int)st2.pop();
+                int op1 = (int)st2.pop();
+                switch(postArr[i]){
+                    case '+' : st2.push((int)(op1+op2)); break;
+                    case '-' : st2.push((int)(op1-op2)); break;
+                    case '*' : st2.push((int)(op1*op2)); break;
+                    case '/' : st2.push((int)(op1/op2)); break;
+                }
+            }
+        }
+        int result = (int)st2.pop();
+        st2.clear();
+        return result;
+    }    
     public static void main(String[] args)throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
         System.out.print("Input CalcExp: ");
-        char [] exp = br.readLine().toCharArray();
+        char [] expression = br.readLine().toCharArray();
 
-        char [] changedArr = changePostFix(exp);
-        for(int i=0;i<changedArr.length;i++){
-            sb.append(changedArr[i]+" ");
+        for(int i=0;i<expression.length;i++){
+            sb.append(expression[i]+ " ");
         }
+        System.out.println(sb.toString());
 
-        System.out.println("changedExp : "+ sb.toString());
+        char [] changedArr = changePostFix(expression);
+        
+        calPostFix(changedArr);
         
     }
     
