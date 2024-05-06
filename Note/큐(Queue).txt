@@ -69,5 +69,48 @@ typedef struct _Queue{
 	int front;
 	int rear;
 	Data queArr[QUE_LEN];
-
 } CQueue;
+
+구현
+
+Helper Function 
+
+// 큐의 연산에 의해서 F 와 R 이 이동할때 이동해야 할 위치를 알려주는 함수.
+int NextPosIdx(int pos){
+	if(pos == QUE_LEN-1)
+		return 0;
+	else 
+		return pos+1;
+}
+
+Init 함수
+void QueueInit(Queue * pq) {
+	pq->front = 0;
+	pq->rear = 0;
+}
+
+Empty 판별하는 함수 
+int QIsEmpty(Queue * pq){
+	if(pq->front == pq->rear) // 같은 인덱스를 동시에 가리키는 상태는 Empty
+		return TRUE;
+	else
+		return FALSE;	
+}
+
+void Enqueue(Queue * pq , Data data){
+	if(NextPosIdx(pq->rear) == pq->front){
+		printf("Queue Memory Error !");
+		exit(-1);
+	}
+	pq->rear = NextPosIdx(pq->rear);
+	pq->queArr[pq->rear] = data;
+}
+
+Data Dequeue(Queue * pq){
+	if(QIsEmpty(pq)){
+		printf("Queue Memory Error!");
+		exit(-1);
+	}
+	pq->front = NextPosIdx(pq->front);
+	return pq->queArr[pq->front];
+}
