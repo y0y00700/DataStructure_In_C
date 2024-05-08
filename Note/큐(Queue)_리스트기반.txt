@@ -1,0 +1,31 @@
+큐의 연결 리스트 기반 구현
+
+그림 -> 코드
+
+배열기반과 동일하게 front/rear 를 멤버로 갖는다.
+
+front(머리) - 삭제
+rear(꼬리) - 삽입 
+
+도전해보면 좋음.
+
+구조체 정의
+
+typedef struct _node{
+	Data data;
+	struct _node * next;
+}Node;
+
+typedef struct _lQueue{
+	Node * front;
+	Node * rear;
+}LQueue;
+
+고민될 수 있는 내용.
+
+pq->front == NULL 이면 empty이다 ?
+
+Init 
+Empty 
+Enqueue
+Dequeue
