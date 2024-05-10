@@ -1,0 +1,64 @@
+덱(Deque)의 이해와 구현
+Double Ended Queue의 줄임말
+양방향이 뒤라는 뜻
+
+양쪽 방향으로 삽입 / 삭제가 가능하다.
+
+즉, 덱은 앞으로도 뒤로도 넣을 수 있고, 앞으로도 뒤로도 뺄 수 있는 자료구조이다.
+
+덱의 4가지 연산
+front 로 삽입
+front 로 삭제
+rear 로 삽입
+rear 로 삭제
+
+스택 과 큐의 특성을 가지고 있다.
+
+한쪽 방향으로 넣고 한쪽 방향으로 출력하면 - Stack
+한쪽 방향으로 넣고 반대 방향으로 출력하면 - Queue
+
+덱의 ADT
+void DequeInit(Deque * pdeq);
+ - 덱의 초기화를 진행한다.
+ - 덱 생성 후 제일 먼저 호출 되는 함수이다.
+
+int DQIsEmpty(Deque * pdeq);
+ - 덱이 빈 경우 TRUE , 그렇지 않은 경우 FALSE 반환
+
+void DQAddFirst(Deque * pdeq, Data data);
+ - 덱의 머리에 데이터를 저장한다. data로 전달된 값을 저장한다.
+
+void DQAddLast(Deque * pdeq, Data data);
+ - 덱의 꼬리에 저장한다. data로 전달된 값을 저장한다.
+
+Data DQRemoveFirst(Deque * pdque);
+ - 덱의 머리에 위치한 데이터를 반환 및 소멸한다.
+
+Data DQRemoveLast(Deque * pdque);
+ - 덱의 꼬리에 위치한 데이터를 반환 및 소멸한다.
+
+Data DQGetFirst(Deque * pdeq);
+ - 덱의 머리에 위치한 데이터를 소멸하지 않고 반환한다.
+
+Data DQGetLast(Deque * pdeq);
+ - 덱의 꼬리에 위치한 데이터를 소멸하지 않고 반환한다.
+
+
+덱의 구현 
+
+구조체
+
+노드 (양방향 연결 리스트구조) : 
+덱의 구현에 가장 어울리는 자료구조는 양방향 연결리스트이다. -> 이전 주소값을 위한 멤버없이 prev로 해당 Node 를 참조할수 있기 때문이다.
+typedef struct _node{
+Data data;
+struct * _node next;
+struct * _node prev;
+} Node;
+
+typedef struct _dlDeque{
+Node * head;
+Node * tail;
+}
+
+앞과 뒤로 입출력 연산이 이루어 지므로 head 와 tail 이 둘다 필요하다.
