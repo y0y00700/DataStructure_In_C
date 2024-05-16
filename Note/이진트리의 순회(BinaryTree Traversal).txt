@@ -1,0 +1,76 @@
+이진트리의 순회(Traversal)
+
+- 재귀에 대한 연습됨!
+
+A+B 
+A(C+D) B (E+F) 라하면?
+
+이진트리의 순회는 지극히 재귀적(Recursive)이다.
+
+순회의 세가지 방법
+기준은 루트 노드를 언제 방문하느냐에 있다.
+
+중위 순회 (왼 루 오) : 중간에 루트 접근
+후위 순회 (왼 오 루) : 마지막에 루트 접근
+전위 순회 (루 왼 오) : 첫번째에 루트 접근
+
+
+높이가 2 이상인 트리의 순회도 이와 다르지 않다.
+재귀적인 형태로 순회의 과정을 구성하면 높이에 상관없이 순회가 가능하다!
+
+1. 왼쪽 서브트리의 순회
+2. 루트 노드의 방문
+3. 오른쪽 서브트리의 순회
+
+위 텍스트를 그대로 코드 구현
+void InorderTraverse(BTreeNode * bt){
+	if(bt!=NULL){
+		InorderTraverse(bt->left); // 1
+		printf("%d \n", bt->data); // 2
+		InorderTraverse(bt->right); // 3
+	}
+	return;
+}
+(예시 코드)
+BinaryTree.h 
+BinaryTree.c
+BinaryTreeTraverseMain.c 
+
+전위 순회와 후위 순회
+전위
+void PreoderTraverse(BTreeNode * bt){
+	if(bt!=NULL){
+		printf("%d \n", bt->data); // 1
+		PreoderTraverse(bt->left); // 2
+		PreoderTraverse(bt->right); // 3
+	}
+	return;
+}
+후위
+void PostorderTraverse(BTreeNode * bt){
+	if(bt!=NULL){
+		PostorderTraverse(bt->left); // 1
+		PostorderTraverse(bt->right); // 2
+		printf("%d \n", bt->data); // 3
+	}
+	return;
+}
+
+노드의 방문 이유! 자유롭게 구성하기!
+
+// 이름(*VisitFuncPtr)로 대신해도 됨
+typedef void VisitFuncPtr(BTData data); // 함수포인터 정의
+
+void InorderTraverse(BTreeNode * bt,VisitFuncPtr action){
+	if(bt!=NULL){
+		InorderTraverse(bt->left,action); // 1
+		action(bt->data); // 2
+		InorderTraverse(bt->right,action); // 3
+	}
+	return;
+} // action이 가리키는 함수를 통해서 방문을 진행
+
+void ShowIntData(int data){
+	printf("%d",data);
+}
+
