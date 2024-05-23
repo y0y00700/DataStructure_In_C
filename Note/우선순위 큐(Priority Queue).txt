@@ -1,9 +1,7 @@
-우선순위 큐(Priority Queue)
-
-트리의 연장선상으로 바라볼수 있음. (힙 Heap)
+트리의 연장선상으로 바라볼수 있음.
 
 입구에 들어가는 순서에 상관 없이 
-
+Q
 우선순위가 높은 순으로 출구로 빠져나오는 형태
 
 우선순위 큐의 두가지 연산
@@ -36,6 +34,8 @@ heap을 이용하는 방법
 
 힙의 데이터 저장/삭제과정이 이해하기 생각보다 어렵다.
 
+
+
 - 힙의 데이터 저장 과정(규칙)
 오름차순 정렬 기준  
 
@@ -50,3 +50,95 @@ heap을 이용하는 방법
 1. 루트를 삭제(비움)
 2. 리프노드를 루트 노드로 이동
 3. 부모노드와 자식 노드를 비교하여 자리 이동을 시킨다.(단 left와 right 중 큰놈과만 비교하면 됨)
+
+
+삽입과 삭제의 과정에서 보인 성능의 평가
+
+배열 기반 데이터 삽입의 시간 복잡도 O(n)
+배열 기반 데이터 삭제의 시간 복잡도 O(1)
+
+연결 리스트 기반 데이터 삽입의 시간 복잡도 O(n)
+연결 리스트 기반 데이터 삭제의 시간 복잡도 O(1)
+
+힙 기반 데이터 삽입의 시간 복잡도 O(logn)
+힙 기반 데이터 삭제의 시간 복잡도 O(logn)
+(※ 배열기반 힙 구성기준) 
+
+배열을 기반으로 힙을 구현하는데 필요한 지식들
+
+연결 리스트를 기반으로 힙을 구현하면, 새로운 노드를 힙의 '마지막 위치'에 추가하는 것이 쉽지 않다.
+
+배열 기반에서 인덱스 값 구하기.
+왼쪽 자식 노드의 인덱스 값 : 부모 노드의 인덱스 값 * 2
+오른쪽 자식 노드의 인덱스 값 : 부모 노드의 인덱스 값 * 2 + 1
+부모 노드의 인덱스 값 : 자식 노드의 인덱스 값 / 2
+
+힙 구현 (헤더)
+
+typedef struct _heapElem{
+Priority pr; // 값이 작을수록 높은 우선순위
+HData data;
+} HeapElem;
+
+typedef struct _heap{
+int numOfData;
+HeapElem heapArr[HEAP_LEN];
+}
+
+void HeapInit(Heap * ph);
+void HIsEmpty(Heap * ph);
+
+void Insert(Heap * ph,HData data,Priority pr);
+HData HDelete(Heap * ph);
+
+힙구현에 있어 숙지할 내용
+힙은 완전 이진 트리이다.
+힙의 구현은 배열을 기반으로 하여 인덱스가 0인 요소는 비워둔다.
+따라서, 힙에 저장된 노드의 개수와 마지막 노드의 고유번호는 일치한다.
+노드의 고유번호가 노드가 저장되는 배열의 인덱스 값이 된다.
+우선순위를 나타내는 정수 값이 작을수록 높은 우선순위를 나타낸다고 가정한다.
+※ 배열을 기반으로 하는 경우 힙에 저장된 노드의 개수와 마지막 노드의 고유번호 일치
+   하기 때문에 마지막 노드의 인덱스 값을 쉽게 얻을 수 있다. 이것은 중요한 특징이다.
+
+초기화와 Helper
+
+void HeapInit(Heap * ph) {
+ph->numOfData = 0;
+}
+
+int HIsEmpty(Heap * ph){
+if(ph->numOfData == 0)
+return TRUE;
+else
+return FALSE;
+}
+// Parent 노드 반환
+int GetParentIdx(int idx){
+return idx/2;
+}
+// Left child 노드 반환
+int GetLChildIdx(int idx){
+return idx*2;
+}
+
+// Rightt child 노드 반환
+int GetRChildIdx(int idx){
+return GetLChildIdx(idx)+1;
+}
+
+// ** 우선 순위가 높은 자식의 인덱스 값 반환 function
+int GetHiPriChildIdx(Heap * ph,int idx){
+//자식노드 존재 x -> 0반환
+if(GetLchildIdx(idx) > ph->numOfData) return 0;
+
+//자식노드 1개만 존재 o -> 자식 인덱스 반환
+else if(GetLChildIdx(idx) == ph->numOfData)
+return GetChildIdx(idx); 
+// 자식노드 2개 존재한다면 
+else {
+// 오른쪽 자식의 우선순위가 높은 경우
+if(ph->heapArr[GetLChildIdx(idx)].pr > ph->heapArr[GetRChildIdx(idx)].pr)
+return GetRChildIdx(idx);
+// 왼쪽 자식이 높은경우
+else return GetLChildIdx(idx);
+}
