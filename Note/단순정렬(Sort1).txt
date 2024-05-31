@@ -26,7 +26,7 @@ int i,j;
 int maxIdx;
 int temp;
 
-fro(i=0;i<n-1;i++){
+for(i=0;i<n-1;i++){
 maxIdx = i;
 for(j = i+1;j<n;j++){
 if(arr[j]<arr[maxIdx])
@@ -45,3 +45,28 @@ O(n^2)
 
 
 삽입 정렬: 이해
+1. 정렬이 완료된 영역과 정렬이 안된 영역을 구분해둔다.
+2. 정렬이 되지 않은 영역에서 데이터를 정렬된 영역으로 넣어 정렬 및 영역을 확장하는 방식이다.
+
+구현 관점
+뒤로 한칸씩 밀어내면서(이동) 자리를 찾는 경우 그 위치 인덱스로 집어 넣는다.
+
+void InsertSort(int arr[],int n){
+	int i,j;
+	int insData;
+	
+	for(i=1; i<n;i++){
+		insData = arr[i]; // 미리 데이터를 저장해둠
+		for(j=i-1;j>=0;j--){
+			if(arr[j] > insData)
+				// 뒤로 미는 과정
+				arr[j+1]=arr[j];
+			else	break;
+		}
+		arr[j+1] = insData;
+	}
+}
+성능 평가
+O(n^2)
+
+

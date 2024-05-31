@@ -1,0 +1,37 @@
+복잡하지만 효율적인 정렬 알고리즘
+
+1. 힙 정렬 알고리즘
+: 힙의 특성을 활용하여, 힙에 정렬한 대상을 모두 넣었다가 다시 꺼내어 정렬을 진행!
+
+int PriComp(int n1,int n2){
+	return n2-n1; // 오름차순 정렬을 위한 문장
+//	return n1-n2;
+}
+
+void HeapSort(int arr[],int n, PriorityComp pc){
+	Heap heap;
+	int i;
+
+	HeapInit(&heap,pc);
+
+	//정렬 대상을 가지고 힙을 구성
+	for(i=0;i<n;i++)
+		HInsert(&heap, arr[i]);
+
+	//순서대로 하나씩 꺼내서 정렬 완성
+	for(i=0;i<n;i++)
+		arr[i] = HDelete(&heap);
+}
+
+성능평가
+완전이진트리 -> O(log2N)의 복잡도
+
+O(2log2N) 그런데 
+앞의 2는 빅-오에서 무시가능하므로 O(nlog2N)
+
+하나의 데이터를 넣었다가 빼므로 2n * log2N
+상수 2는 무시
+N개의 데이터에 대해 O(nlog2N) 이된다.
+
+병합 정렬: Divide and Conquer(DAC)
+복잡 효율 알고리즘 3장부터
