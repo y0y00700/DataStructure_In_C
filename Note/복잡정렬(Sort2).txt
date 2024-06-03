@@ -52,7 +52,7 @@ N개의 데이터에 대해 O(nlog2N) 이된다.
 
 void MergeSort(int arr[], int left, int right){
 	int mid;
-	if(left<right){ // left가 작다는 것은 더 날눌 수 있다는 뜻
+	if(left<right){ // left가 작거나 같으면 더 날눌 수 있다는 뜻
 		//중앙 계산.
 		mid = (left+right)/2;
 		MergeSort(arr,left,mid); // left~mid에 위치한 데이터 정렬
@@ -90,3 +90,51 @@ void MergeTwoArea(int arr[],int left,int mid, int right){
 		arr[i] = sortArr[i];
 	free(sortArr);
 }
+
+https://gmlwjd9405.github.io/2018/05/08/algorithm-merge-sort.html
+
+
+
+병합정렬 성능 평가
+
+Divide and Conquer
+
+분할 과정  = log2N
+
+병합 과정 -> 
+비교 연산의 과정 =  N번  
+
+이동 연산 = N번 
+
+
+N*N*log2N = 2nlog2n 이므로 
+
+따라서 빅-오는  O(nlogn) 이다
+
+
+퀵 정렬 : 이해 
+- 1단계 : 초기화
+left : 정렬대상의 왼쪽 지점
+right : 정렬대상의 오른쪽 지점
+pivot : 중심축 지점
+low : 피벗을 제외한 가장 왼쪽에 위치한 지점
+high : 피벗을 제외한 가장 오른쪽에 위치한 지점
+
+- 2단계
+low는 오른쪽으로 이동 -> 피벗보다 큰값을 만날 때까지
+high는 왼쪽으로 이동 -> 피벗보다 작은 값을 만날 때까지
+
+- 3단계
+low와 high의 데이터 교환
+
+이후, 지속해서 이동(high와 low가 역전될때까지)
+역전되면 멈춘다.
+
+- 4단계
+high와 low가 역전되면, 피벗과 high의 데이터 교환
+(여기까지가 1회전)
+
+피봇위치를 기점으로 두개의 영역으로 나누어 반복 실행
+
+
+left>right 일때까지 반복
