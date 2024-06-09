@@ -1,0 +1,182 @@
+Chapter 11. 탐색(Search)
+어떻게 탐색할것인가 (x)
+탐색에 유용하도록 데이터를 저장하는 방법(o)
+
+ 11-1
+탐색의 이해와 보간탐색
+탐색의 이해
+효율적인 탐색을 위해서는 어떻게 찾을까가 아닌
+ 어떻게 저장할것인가를 고민해야 한다.
+
+보간 탐색
+이진 탐색과 보간 탐색 모두 정렬이 완료된 데이터를 대상으로 
+탐색을 진행하는 알고리즘이다.
+
+이진 탐색 : 무조건 중간에 위치한 데이터를 탐색의 위치로 결정
+보간 탐색 : 대상에 비례하여 탐색의 위치를 결정
+
+보간 탐색은 단번에 탐색 대상을 찾을 확률이 어느 정도 존재한다.
+
+보간 탐색 : 비례식 구성
+low : 배열 시작 idx
+high : 배열 끝 idx
+s = mid idx 탐색 대상이 저장된 인덱스 값 S
+A = arr[high]-arr[low]
+Q = arr(s) - arr[low]
+비례식 구성
+ A : Q = (high-low) : (s-low)
+
+ s = Q/A(high-low)+low
+ s = x-arr[low]/arr[high]-arr[low] * (high-low)+low
+
+
+보간 탐색의 구현
+// 불완전한 구현
+int BSearchRecur(int ar[], int first , int last, int target){
+	int mid;
+	if(first > last)
+		return -1;
+
+	mid = (first+last) / 2; // mid = ((double)(target-ar[first])/(ar[last]-ar[first]) * (last-first))+first; 로 교체시 보간탐색이 된다.
+	if(ar[mid] == target)
+		return mid;
+	else if(target < ar[mid])
+		return BSearchRecur(ar,first,mid-1,target);
+	else 
+		return BSearchRecur(ar,mid+1,last,target);
+
+}
+
+※ 탐색 키와 탐색 데이터
+typedef Key int; // 탐색 키에 대한 typedef
+typedef Data double; // 탐색 데이터에 대한 typedef
+
+typedef struct item{
+	Key searchKey;
+	Data searchData; 
+} Item;
+
+실제 프로그램 개발에 있어 탐색의 대상은 데이터가 아닌 키 이다.
+다만 학습의 편의를 위해 우리는 데이터를 찾는 형태로 간단한 예제를 작성하고 있다.
+
+보간 탐색의 구현 : 오류의 수정
+
+이진 탐색의 탈출 조건
+if(first > last)
+	return -1;
+-> 탐색 대상이 존재하지 않는 경우 오동작을 일으킴
+
+
+보간 탐색은? 
+// 값의 범위가 넘어간 경우 탈출
+if(arr[first]>target || arr[last]<target)
+	return -1;
+
+11-2. 이진 탐색 트리(Binary Search Tree) : BST
+
+삽입 / 참조는 easy
+삭제과정이 좀 어려움.
+
+이진 탐색 트리 = 이진 트리 + 데이터의 저장 규칙
+
+자료구조         위치 정보   데이터의 수   거치는 노드의 수
+연결리스트       있다.          10억 개      최악의 경우 10억개
+이진 탐색 트리  있다.          10억 개        평균 30개 미만
+
+- 이진 탐색 트리의 노드에 저장된 키는 유일하다.
+- **루트 노드의 키 > 왼쪽 서브 트리를 구성하는 키
+- **루트 노드의 키 < 오른쪽 서브 트리를 구성하는 키
+- 왼쪽과 오른쪽 서브 트리도 이진 탐색 트리.
+
+이진 탐색 트리의 노드 추가 과정
+
+새 노드의 추가 과정은, 반대로 탐색의 과정이 된다.
+
+이진 탐색 트리의 구현 방안
+
+구현 방법1 
+ 이전에 구현한 이진 트리를 참조하여 처음부터 완전히 다시 구현
+구현 방법2 (v)
+ 이진 탐색 트리도 이진 트리이니, 이전에 구현한 이진 트리를 활용하여 구현한다.
+ BinaryTree2.h 와 BinaryTree2.c 를 활용하여 구현
+
+
+BinarySearchTree.h // 헤더 파일에 추가되는 Func
+//BST 생성 및 Init
+void BSTAndInit(BTreeNode ** pRoot);
+
+// 노드에 저장된 데이터 반환
+BSTData BSTGetNodeData(BTreeNode *bst);
+
+// BST를 대상으로 데이터 저장(노드의 생성과정 포함)
+void BSTInsert(BTreeNode ** pRoot, BSTData data);
+
+// BST를 대상으로 데이터 탐색
+BTreeNode * BSTSearch(BTreeNode *bst, BSTData target)
+
+※ 삭제함수는 별도 추가
+
+
+이진 탐색 트리의 구현 : 삽입과 탐색
+
+비교대상이 없을 때까지 내려간다.
+그리고 비교대상이 없는 그 위치가 새 데이터가 저장될 위치이다.
+
+void BSTInsert(BTreeNode ** pRoot, BSTData data){
+	BTreeNode * pNode = NULL; // parent node
+	BTreeNode * cNode = *pRoot; //current node
+	BTreeNode * nNode = NULL; // new node
+
+	//새로운 노드가 (새 데이터가 담긴 노드가) 추가될 위치를 찾는다.(탐색)
+	while(cNode !=NULL){
+		if(data == GetData(cNode))
+			return; // 데이터의 (키) 중복을 허용 x
+
+		pNode = cNode;
+
+		if(GetData(cNode) > data)
+			cNode = GetLeftSubTree(cNode);
+		else
+			cNode = GetRightSubTree(cNode);
+	}
+
+	// pNode의 자식 노드로 새 노드를 추가(insert)
+	if(pNode != NULL) // 새 노드가 루트 노드가 아니라면,
+	{
+		if(data < GetData(pNode))
+			MakeLeftSubTree(pNode,nNode);
+		else
+			MakeRightSubTree(pNode,nNode);
+	}
+	else{
+		*pRoot = nNode;
+	}
+}
+
+BTreeNode * BSTSearch(BTreeNode * bst, BSTData target){
+	BTreeNode * cNode = bst; // cur Node
+	BSTData cd; // cur Data
+
+	while(cNode != NULL){
+		cd = GetData(cNode);
+	
+		if(target == cd)
+			return cNode;
+		else if (target < cd)
+			return GetLeftSubTree(cNode);
+		else
+			return GetRightSubTree(cNode);
+	}
+	
+	return NULL; // 탐색 대상이 저장되어 있지 않음.
+}
+
+void BSTMakeAndInit(BTreeNode ** pRoot){
+	*pRoot = NULL;
+}
+
+BSTData BSTGetNodeData(BTreeNode *bst){
+	return GetData(bst);
+}
+
+// 삭제 4번 부터 시청
