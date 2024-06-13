@@ -180,3 +180,39 @@ BSTData BSTGetNodeData(BTreeNode *bst){
 }
 
 // 삭제 4번 부터 시청
+
+이진 탐색 트리 삭제 구현: 상황 별 삭제
+
+삭제와 관련해서 고려해야 할 세 가지 상황
+case1 삭제할 노드가 단말 노드인 경우
+case2 삭제할 노드가 하나의 자식 노드를(하나의 서브트리를) 갖는 경우
+case3 삭제할 노드가 두개의 자식 노드를(두개의 서브트리를) 갖는 경우
+
+각 상황 별로 추가로 삭제할 노드가 루트 노드인 경우를 구분해야 하지만
+이를 피해가는 형태로 코드를 구성하기로 한다.
+
+상황1)
+
+if(삭제할 노드가 단말 노드){
+if(GetLeftSubTree(pNode) == dNode)
+RemoveLeftSubTree(pNode);
+else 
+RemoveRightSubTree(pNode);
+}
+
+상황2)
+if(삭제할 노드가 하나의 자식 노드를 갖고있다){
+BTreeNode * dcNode; // 삭제 대상의 자식 노드를 가리키는 포인터
+
+// 삭제 대상의 자식 노드를 찾는다.
+if(GetLeftSubTree(dNode) != NULL)
+dcNode = GetLeftSubTree(dNode);
+else
+dcNode = GetRightSubTree(dNode);
+
+// 삭제 대상의 부모 노드와 자식 노드를 연결
+if(GetLeftSubTree(pNode) == dNode)
+ChangeLeftSubTree(pNode
+else
+ChangeRightSubTree(pNode,dcNode);
+}
