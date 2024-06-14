@@ -1,0 +1,157 @@
+이진 탐색 트리의 이해
+
+이진 탐색 트리의 3가지 연산 방법 이해
+원소 삽입, 삭제 , 검색
+
+이진 탐색 트리란 : 원소를 특정한 조건에 따라 정렬
+모든 원소는 유일한 키 값을 갖는다.
+왼쪽 서브트리는 루트보다 작은 key 를 갖는다.
+오른쪽 서브트리는 루트보다 큰 key 를 갖는다.
+왼쪽 서브트리와 오른쪽 서브트리도 이진탐색 트리이다.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef char data;
+typeder struct _Node{
+	char key;
+	struct _Node* left;
+	struct _Node* right;
+}Node;
+
+Node* searchBST(Node* root, char x){
+	Node* p = root;
+	while(p!=NULL){
+		if(p->key == x)
+			return p;
+		else if(p->key < x)
+			p = p->right;
+		else 
+			p = p->left;
+	}
+	return NULL;
+}
+
+Node* insertBST(Node* root, char x){
+	Node* p = root;
+	Node* parent = NULL; // 루트가 비어있는 경우 노드를 무조건 삽입해야 하므로 초기값은 NULL로 지정해준다. 
+	// 탐색 (parent 변수가 추가됨) 
+	while(p!=NULL){
+		parent = p; 
+		if(p->key == x){
+			printf("same key exit!\n");
+			return p;
+		}
+		else if(p->key < x)
+			p = p->right;
+		else 
+			p = p->left;
+	}
+	
+	// 새노드 할당
+	Node *newNode = (Node*)malloc(sizeof(Node));
+	newNode->key = x;
+	newNode->left = newNode->right = NULL;
+	 
+	 //parent의 자식으로 새노드 붙이기.
+	if(parent!=NULL){
+		if(parent->key < newNode->key)
+			parent->right = newNode;
+		else
+			parent->left = newNode;
+	}
+	return NULL;
+}
+
+
+Node* deleteBST(Node* root, char x){
+	Node* p = root;
+	Node* parent = NULL; // 루트가 비어있는 경우 노드를 무조건 삽입해야 하므로 초기값은 NULL로 지정해준다. 
+	// 탐색 (parent 변수가 추가됨) 
+	while((p!=NULL)&&(p->key !=x)){
+		parent = p; 
+		if(p->key < x)
+			p = p->right;
+		else 
+			p = p->left;
+	}
+	if(p==NULL){
+		printf("찾는 노드가 없습니다.\n");
+		return root;
+	}
+	
+	if(p->left==NULL&&p->right == NULL){ // 차수가 0인 경우 
+		if(parent==NULL)
+			root = NULL;
+		else{
+			if(parent->left == p)
+				parent->left = NULL;
+			else 
+				parent->right = NULL;
+		}
+	}
+	
+	free(p);
+}
+
+int main(void) {
+	return 0;
+}
+
+
+탐색->O( log2N )
+
+//중위 운행 : 왼쪽 중앙 오른쪽 순으로 처리
+
+
+구현
+
+1. 탐색
+다른 두가지 연산은 탐색을 기반으로 구현
+typeder Node{ // 노드 구조체
+char data;
+struct Node * left;
+struct Node * right;
+}
+
+base:)
+Search(root,x)
+p = root
+// 아래 구문을 찾기 성공 or 실패까지 반복해야 함.
+if(p->data == x)
+return p;
+else (p>data <x)
+p=p->right;
+else p = p->left;
+
+// 실패는 말단노드가 NULL 일때까지이므로 
+
+// 반복문은
+while( p != NULL) // p가 NULL이 아닐때까지 반복한다.
+{ if(p->data == x)
+return p;
+else (p>data <x)
+p=p->right;
+else p = p->left;
+}
+return NULL;// NULL 포인터를 반환
+
+삽입
+삽입은 탐색을 일단 한 다음 탐색에 실패했을때 삽입해야 한다.
+(탐색의 실패 지점)
+탐색의 실패지점은 NULL 이 되므로, 해당 NULL 이 되기전 parent 값을 미리 받아둬야한다.
+p를 한발짝 움직일 때마다  움직이기 전 p값을 parent에 저장하면서 움직인다.
+그리고 마지막에 p가 NULL이 되거든 그때의 parent 의 child에 붙이면 된다.
+
+삭제
+삭제후에도 이진탐색트리를 유지해야 하기 때문에 까다로울수 있다.
+
+단말노드 
+차수에 따라 다름
+차수
+0 : 단말노드를 NULL 로 치환해두면 끝
+1
+2
+
+
+
