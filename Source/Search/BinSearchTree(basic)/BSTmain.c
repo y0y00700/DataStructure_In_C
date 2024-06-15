@@ -72,7 +72,7 @@ Node* deleteBST(Node* root, char x){
 	if(p->left==NULL&&p->right == NULL){ // 차수가 0인 경우 
 		if(parent==NULL)
 			root = NULL;
-		else{
+		else{ // 삭제 대상의 부모 노드의 연결을 NULL 로 치환
 			if(parent->left == p)
 				parent->left = NULL;
 			else 
@@ -82,21 +82,21 @@ Node* deleteBST(Node* root, char x){
 		Node* child =(p->left !=NULL) ? p->left : p->right;
 		if(parent == NULL)
 			root = child;
-		else{
-			if(parent->left == p)
+		else{ // 삭제 대상의 부모 <-> 삭제 대상의 자식 연결
+			if(parent->left == p) 
 				parent->left = child;
 			else
 				parent->right = child;
 		}
-	}else{ // 차수가 2 인경우 (우측트리의 왼쪽자식이 없는 노드가 최종 successor)
+	}else{ // 차수가 2 인경우 
 		Node* succ_parent = p;
 		Node* succ = p->right;
-		while (succ->left !=NULL){
+		while (succ->left !=NULL){ // (우측트리의 왼쪽자식이 없는 노드가 최종 successor)
 			succ_parent = succ;
 			succ = succ->left;
 		}
-		p->key = succ->key; // root 에 succ 를 치환
-		if(succ_parent->left == succ)
+		p->key = succ->key; // root 에 succ key값을 치환
+		if(succ_parent->left == succ) // 삭제 대상 노드의 부모 <-> 삭제 대상 자식 연결
 			succ_parent->left = succ->right;
 		else 
 			succ_parent->right = succ->right;
