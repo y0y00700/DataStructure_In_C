@@ -59,3 +59,83 @@ LR 상태와 반대로 구현해준다.
 해당 RR상태로 변경된 트리 상태를 RR 회전을 통해 균형을 잡는다.
 
 
+
+AVL 트리의 구현1
+
+-> Binary Tree
+BinaryTree3.h
+BinaryTree3.c
+
+-> BST 
+BinarySearchTree2.h
+BinarySearchTree2.c
+
+->AVL
+BinarySearchTree2.c 에 리밸런싱 기능을 추가하여, 
+
+BinarySearchTree3.c 로 변경
+
+AVLRebalance.h -> 리밸런싱 관련 함수 선언
+AVLRebalance.c -> 리밸런싱 관련 함수 정의
+
+AVL 트리 구현을 위한 확장 포인트
+-> 균형은 노드의 삽입과 삭제의 순간에 깨지게 된다.
+BSTInsert 함수 트리에 노드를 추가
+BSTRemove 함수 트리에서 노드를 제거
+
+
+//두 서브 트리의 높이의 차(균현 인수) 를 반환
+int GetHeightDiff(BTreeNode * bst){
+	int lsh; 
+	int rsh;
+
+	if(bst ==NULL)
+		return 0;
+	lsh = GetHeight(GetLeftSubTree(bst));
+	rsh = GetHeight(GetRightSubTree(bst));
+	return lsh-rsh;
+}
+
+int GetHeight(BTreeNode * bst){
+	int leftH;
+	int rightH;
+
+	if(bst == NULL)
+		return 0;
+
+	leftH = GetHeight(GetLeftSubTree(bst));
+	rightH = GetHeight(GetRightSubTree(bst));
+
+	// 큰 값의 높이를 반환
+	if(leftH > rightH)
+		return leftH + 1;
+	else
+		return rightH+1;
+}
+
+BTreeNode * RotateLL(BTreeNode * bst){
+	BTreeNode * pNode;
+	BTreeNode * cNode;
+
+	pNode = bst;
+	cNode = GetLeftSubTree(pNode);
+
+	ChangeLeftSubTree(pNode, GetRightSubTree(cNode));
+	ChangeRightSubTree(cNode , pNode);
+
+	return cNode;
+}
+
+
+BTreeNode * RotateRR(BTreeNode * bst){
+	BTreeNode * pNode;
+	BTreeNode * cNode;
+
+	pNode = bst;
+	cNode = GetRightSubTree(pNode);
+
+	ChangeRightSubTree(pNode, GetLeftSubTree(cNode));
+	ChangeLeftSubTree(cNode , pNode);
+
+	return cNode;
+}
