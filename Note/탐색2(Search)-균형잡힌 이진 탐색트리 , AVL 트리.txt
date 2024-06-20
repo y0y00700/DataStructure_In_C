@@ -181,3 +181,59 @@ BTreeNode * Rebalance(BTreeNode ** pRoot){
 	}
 	
 }
+
+
+BinarySearchTree2.c 의 실질적변화
+
+// 예측
+void BSTInsert(BTreeNode ** pRoot, BSTData data){
+
+...
+ Rebalance(pRoot); // 노드 추가 후 리밸런싱
+}
+
+void BSTInsert(BTreeNode ** pRoot, BSTData data){
+
+...
+ Rebalance(pRoot); // 노드 제거 후 리밸런싱
+return dNode;
+}
+
+// 실질적 변화
+: 이유 -> root Node 가 변경될 수 있기 때문에 (변경된 Root 를 리턴해줘야한다)
+void BSTInsert(BTreeNode ** pRoot, BSTData data){
+
+...
+*pRoot = Rebalance(pRoot); // 노드 추가 후 리밸런싱
+}
+
+void BSTDelete(BTreeNode ** pRoot, BSTData data){
+
+...
+*pRoot = Rebalance(pRoot); // 노드 제거 후 리밸런싱
+return dNode;
+}
+
+완전히 트리의 균형을 잡지는 못하고 있다.
+BSTInsert 가 변경이 필요하다.
+
+이유: Root 노드만을 기준으로 리밸런싱을 진행하기 때문
+
+BTreeNode * BSTInsert(BTreeNode ** pRoot,BSTData data){
+	if(*pRoot ==NULL){
+		*pRoot = MakeBTreeNode();
+		SetData(*pRoot data);
+	}
+	else if(data < GetData(*pRoot)){
+		BSTInsert(&(*pRoot)->left),data);
+		*pRoot = Rebalance(pRoot);
+	}
+	else if(data > GetData(pRoot)){
+		BSTInsert(&(*pRoot)->right),data);
+		*pRoot = Rebalance(pRoot);		
+	}
+	else{
+		return NULL;
+	}
+	return pRoot;
+}
