@@ -149,3 +149,89 @@ void ShowGraphEdgeInfo(ALGraph * pg){
 	}
 }
 
+
+그래프의 탐색
+
+그래프 탐색의 종류(알고리즘)
+1. 깊이 우선 탐색 (Depth First Search)
+2. 너비 우선 탐색 (Breadth First Search)
+
+※ 2개 탐색 방법 모두 그래프의 모든 정점을 방문하는 방법임
+
+1. 깊이 우선 탐색 : Depth First Search -> 탐색의 깊이를 우선시 한다.
+한 정점에만 연락을 취해나가며 탐색한다.
+연락을 할 곳이 없으면 자신에게 연락한 정점에 이를 알린다.
+마지막에 시작지점으로 되돌아오면 연락이 끝난다.
+
+2. 너비 우선 탐색 :  Breadth First Search -> 내 주변의 정점의 수를 우선시 한다. (연결 된 모든 이에게 연락)
+
+
+
+깊이 우선 탐색의 구현 모델 : 과정 
+스택이 필요
+연락을 넘긴 시점에 스택에 올린다.(push)
+더이상 연락할 간선이 존재하지 않는 경우 스택에서 마지막 연락을 취한 정점을 스택에서 꺼낸다.(pop)
+
+깊이 우선 탐색 구현(코드레벨)
+ALGraph.h
+ALGraph.c
+
+ALGraphDFS.h
+ALGraphDFS.c
+
+void DFShowGraphVertex(ALGraph * pg, int startV);
+ - 그래프의 모든 정점 정보를 출력하는 함수
+ - DFS 기반으로 정의가 된 함수
+
+깊이 우선 탐색의 Helper Func
+
+// 방문한 정점의 정보를 기록 및 출력
+int VisitVertex(ALGraph * pg, int visitV){
+	if(pg->visitInfo[visitV] == 0){
+		pg->visitInfo[visitV] = 1;
+		printf("%c ", visitV + 65);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+DFShowGraphVertex 함수의 구현에 필요한 DFShowGraphVertex 함수 내에서
+호출이 되는 함수로써 정점의 정보를 그래프 멤버 visitInfo가 가리키는 배열에 등록하는 기능을 제공한다.
+
+실제 구현
+void DFShowGraphVertex(ALGraph * pg, int startV){
+	// Init Area
+	Stack stack;
+	int visitV = startV;
+	int nextV;
+	StackInit(&stack);
+	VisitVertext(pg,visitV);
+	SPush(&stack,visitV);
+
+	while(LFirst(&(pg->adjList[visitV]), & nextV) == TRUE){
+		int visitFlag = FALSE;
+		if(VisitVertex(pg,nextV) == TRUE){
+			// 방문을 시도했는데 성공시,
+			SPush(&stack,visitV);
+			visitV = nextV;
+			visitFlag = TRUE;
+		}else{
+			// 방문 시도시 실패...
+			while(LNext(&(pg->adjList[visitV]), &nextV) == TRUE){
+				if(VisitVertex(pg,nextV) == TRUE){
+					SPush(&stack,visitV);
+					visitV = nextV;
+					visitFlag = TRUE;
+					break;
+				}
+			}
+		}
+	}
+	if(visitFlag == FALSE){ // 연결된 정점과의 방문이 모두 완료시,
+		if(SIsEmpty(&stack) == TRUE)
+			break;
+		else 
+			visitV = SPop(&stack); // 되돌아 가기 위해 POP 연산
+	}
+	memset(pg->visitInfo,0,sizeof(int) * pg -> numV);
+}
