@@ -2,6 +2,7 @@ package DataStructure;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Stack;
 
 /*  pseudoCode
     // 깊이 우선 탐색의 구현
@@ -58,6 +59,41 @@ import java.util.LinkedList;
             if(visited[i]== false)  DFSUtil(i, visited);
         }
     }
+
+
+    // boolean DFSHelper(int v){
+    //     System.out.println(v + " ");
+        
+    //     // first 방문
+    //     if(visitdS[v] == false){
+    //         visitedS[v] = TRUE;
+    //         return TRUE;
+    //     }
+    //     // 이미 방문되었었던 vertex
+    //     return FALSE;
+    // }
+
+    void DFSWithStack(int v){
+        // Init
+        boolean[] visited = new boolean[V];
+        Stack<Integer> stV = new Stack<Integer>();
+        //DFSHelper(v); // 현재 정점 방문 처리
+        stV.push(v); // stack 에 현재 Vertex 저장
+        while(!stV.empty()){
+            int nextV = stV.pop();
+            if(!visited[nextV]){
+                System.out.print(nextV+" ");
+                visited[nextV] = true;
+                for(int i=0;i<adj[nextV].size();i++){
+                        int nV = adj[nextV].get(i);
+                        if(!visited[i])
+                            stV.push(i);
+                }
+            }
+        }
+    }
+
+
  }
 public class Dfs {
 
@@ -73,6 +109,8 @@ public class Dfs {
 
         g.DFS(2);
         g.DFS();
+        //System.out.println(" ");
+        //g.DFSWithStack(2);
     }
    
 }
