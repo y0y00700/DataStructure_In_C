@@ -1,0 +1,39 @@
+너비 우선 탐색(BFS) 
+
+너비 우선 탐색의 구현 모델
+방문 차례의 기록을 목적으로 하는 Queue(각 Branch) 
+각 Branch가 Queue 에 들어가는 순서는 중요하지 않음.
+
+Queue에서 꺼내질때(Dequeue), 순회를 시작
+
+Queue에서 Dequeue만 발생하는 시점이 생긴다.
+
+Queue가 전부 비워지는 시점(Empty)이 탐색이 끝나는 시점이다.
+
+너비 우선 탐색의 구현
+
+void BFShowGraphVertex(ALGraph * pg, Int startV){
+	Queue queue;
+	int visitV = startV;
+	int nextV;
+	QueueInit(&queue);
+	VisitVertex(pg,visitV);
+
+	while(LFirst(&(pg->adjList(visitV]), &nextV) == TRUE){
+		if(VisitVertex(pg, nextV) == TRUE)
+			Enqueue(&queue, nextV);
+
+		while(LNext(&(pg->adjList(visitV]), &nextV) == TRUE){
+			if(VisitVertex(pg,nextV) == TRUE)
+			Enqueue(&queue, nextV);
+		}
+
+		if(QIsEmpty(&queue) == TRUE){
+			break;
+		else
+			visitV = Dequeue(&queue);
+		}
+
+	memset(pg->visitInfo,0,sizeof(int) * pg->numV);
+	}
+}
