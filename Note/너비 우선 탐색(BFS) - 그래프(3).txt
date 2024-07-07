@@ -37,3 +37,6 @@ void BFShowGraphVertex(ALGraph * pg, Int startV){
 	memset(pg->visitInfo,0,sizeof(int) * pg->numV);
 	}
 }
+
+
+

@@ -1,4 +1,4 @@
-package DataStructure;
+// package DataStructure;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -97,7 +97,7 @@ import java.util.Stack;
             if(!visited[nextV]){
                 System.out.print(nextV+" ");
                 visited[nextV] = true;
-                for(int i=0;i<adj[nextV].size();i++){
+                for(int i=0;i<adjList[nextV].size();i++){
                         int nV = adjList[nextV].get(i);
                         if(!visited[i])
                             stV.push(i);
